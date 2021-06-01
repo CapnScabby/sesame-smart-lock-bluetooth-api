@@ -1,7 +1,7 @@
 # Sesame Smart Lock Bluetooth API
 The sesame smart lock wifi api is easy to use, but very slow. (In my case, from the time my application posts on the API until the door actually begins to unlock is usually between 10 and 15 seconds).
  
-The bluetooth api is desirable for complete local control with low latency.
+The bluetooth api is desirable for local control with low latency.
 
 Two prior works are used to achieve this:
  - https://itsze.ro/blog/2016/12/18/opensesame-reverse-engineering-ble-lock.html
@@ -11,7 +11,11 @@ The original reverse engineering of the API was done by @itszero. The api is pre
 
 This HMAC password is created when pairing with the Sesame Smart Lock app as (I assume) part of the pairing/registration process. So the most difficult part of using this API is extracting your HMAC password from the Sesame App (see the Frida folder for this). 
 
-Once that is done, all you need to control your lock is the MAC address, your email address associated with you sesame account. 
+Once that is done, all you need to control your lock is that password, the MAC address, and your email address associated with you sesame account. 
+
+For details on extracting the password, see the frida folder README.
+
+For details on using the python API, so the python folder README.
 
 https://book.hacktricks.xyz/mobile-apps-pentesting/android-app-pentesting/frida-tutorial/objection-tutorial
 https://frida.re/docs/android/
