@@ -8,6 +8,11 @@ This method works by using frida to instrument a running application and hook in
 
 The Sesame Smart Lock app should already be installed and logged into the appropriate account before the function hooking is started. It does not need to be the same phone that was used to originally pair with the device. In my case I used my Samsung Note 8 (unrooted) to pair with the lock and create my sesame account, and then rooted an old note 5, installed the sesame app, logged in, and then extracted the password.
 
+Most of the commands here were derived by following these tutorials:
+https://book.hacktricks.xyz/mobile-apps-pentesting/android-app-pentesting/frida-tutorial/objection-tutorial
+https://frida.re/docs/android/
+https://gist.github.com/d3vilbug/41deacfe52a476d68d6f21587c5f531d
+
 1. Root your phone. In my case I used my old Samsung Note 5. The processing of rooting is left to the reader as it varies somewhat from phone to phone.
 
 2. Gather the hardware:
