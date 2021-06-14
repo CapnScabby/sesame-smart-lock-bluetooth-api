@@ -9,10 +9,13 @@ import binascii
 
 CODE_LOCK = 1;
 CODE_UNLOCK = 2;
-SERVICE_OPERATION_UUID =           '00001523-1212-efde-1523-785feabcd123'
-CHARACTERISTIC_COMMAND_UUID =      '00001524-1212-efde-1523-785feabcd123' #where we write the commands
-CHARACTERISTIC_ANGLE_STATUS_UUID = '00001525-1212-efde-1523-785feabcd123' #Not used
-CHARACTERISTIC_STATUS_UUID =       '00001526-1212-efde-1523-785feabcd123' #used to fetch nonce for signing
+SERVICE_OPERATION_UUID             = '00001523-1212-efde-1523-785feabcd123'
+CHARACTERISTIC_COMMAND_UUID        = '00001524-1212-efde-1523-785feabcd123' #where we write the commands
+CHARACTERISTIC_COMMAND_HANDLE      = 0x0016
+CHARACTERISTIC_ANGLE_STATUS_UUID   = '00001525-1212-efde-1523-785feabcd123' #Not used
+CHARACTERISTIC_ANGLE_STATUS_HANDLE = 0x0018
+CHARACTERISTIC_STATUS_UUID         = '00001526-1212-efde-1523-785feabcd123' #used to fetch nonce for signing
+CHARACTERISTIC_STATUS_HANDLE       = 0x001b
 
 class SesameSmartLockBTController:
     def __init__(self, user_name, mac_address, password):
@@ -59,18 +62,11 @@ class SesameSmartLockBTController:
         
     def send_command(self, command):
         p = Peripheral(self.mac_address, "random")
-        sesame_service = p.getServiceByUUID(SERVICE_OPERATION_UUID)
-        status_characteristic = sesame_service.getCharacteristics(CHARACTERISTIC_STATUS_UUID)[0]
-        command_characteristic = sesame_service.getCharacteristics(CHARACTERISTIC_COMMAND_UUID)[0]
-        if (status_characteristic.supportsRead()):
-            data = status_characteristic.read()
-            status_data = status_characteristic.read()
-        else:
-            raise ValueError("Could not get status")
+        status_data = p.readCharacteristic(CHARACTERISTIC_STATUS_HANDLE)
         packets = self.prepare_packets(command, status_data)
         for packet in packets:
             packet_bytes = bytes(packet)
-            command_characteristic.write(packet_bytes, withResponse=True)
+            p.writeCharacteristic(CHARACTERISTIC_COMMAND_HANDLE, packet_bytes, withResponse=True)
         p.disconnect()
         
     def lock(self):
@@ -78,4 +74,3 @@ class SesameSmartLockBTController:
     
     def unlock(self):
         self.send_command(CODE_UNLOCK)
-
